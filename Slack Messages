@@ -1,0 +1,33 @@
+import os
+from slack import WebClient
+from slack.errors import SlackApiError
+import urllib3
+import json
+import traceback
+token = 'xoxb-4018314465-3663823261287-Lvqo4g1jjIphNSwvLdcsgmv0' #BOt name- MsgBot
+client = WebClient(token=token)
+
+channel_id = "U032ZG1C6EQ" # Replace channel ID here
+try:
+    response = client.chat_postMessage(
+        channel=channel_id,
+        text="Here is your file."
+    )
+    print(response)
+
+    # echo '<html><body><p>Hello world!</p></body></html>' > ./hello.html
+    file_path = (r"C:\Users\Isha Gusain\Downloads\Monster Report.pbix")  #Provide file path
+    
+
+    with open(file_path , "rb"):
+        response = client.files_upload(
+            channels=channel_id,
+            file=file_path,
+            title='Monster Report', #Give file name
+            filetype='pbix'
+        )
+        print(response)
+
+except SlackApiError as e:
+    print(f"message: {e}, response: {e.response}")
+    raise e
